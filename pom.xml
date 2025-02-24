@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>fr.univtln.bruno.samples.network</groupId>
-  <artifactId>tcpclientserver</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+  <!-- Project coordinates (GAV) - uniquely identifies this project -->
+  <groupId>fr.univtln.bruno.samples.network</groupId>  <!-- Organization's reversed domain name -->
+  <artifactId>tcpclientserver</artifactId>             <!-- Project name -->
+  <version>0.0.1-SNAPSHOT</version>                    <!-- Version with SNAPSHOT indicating in development -->
+  <packaging>pom</packaging>                           <!-- POM packaging for parent/multi-module projects -->
 
-    <name>tcpclientserver</name>
+  <!-- Basic project information -->
+  <name>tcpclientserver</name>
   <url>https://github.com/yourusername/tcpclientserver</url>
-    <modules>
-        <module>client</module>
-      <module>server</module>
-    </modules>
-    <description>A TCP client-server sample application</description>
+  <!-- Sub-modules of this multi-module project -->
+  <modules>
+    <module>client</module>    <!-- Client application module -->
+    <module>server</module>    <!-- Server application module -->
+  </modules>
+  <description>A TCP client-server sample application</description>
 
-  <!-- Define versions in properties for easier management -->
+  <!-- Properties: Central place for version numbers and configuration values -->
   <properties>
-    <!-- Build Properties -->
+    <!-- Build Properties: Character encoding for source and reporting -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- Java Version -->
-    <java.version>21</java.version>
+    <!-- Java Version Configuration -->
+    <java.version>21</java.version>                    <!-- Using Java 21 (LTS) -->
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.release>${java.version}</maven.compiler.release>
 
-    <!-- Dependency Versions -->
-    <junit.version>5.12.0</junit.version>
-    <logback.version>1.5.16</logback.version>
-    <sl4j.version>2.0.16</sl4j.version>
-    <lombok.version>1.18.36</lombok.version>
+    <!-- Dependency Versions: Third-party libraries -->
+    <junit.version>5.12.0</junit.version>              <!-- Testing framework -->
+    <logback.version>1.5.16</logback.version>         <!-- Logging implementation -->
+    <sl4j.version>2.0.16</sl4j.version>               <!-- Logging facade -->
+    <lombok.version>1.18.36</lombok.version>           <!-- Boilerplate code reduction -->
 
     <!-- Plugin Versions -->
     <maven.compiler.version>3.14.0</maven.compiler.version>
@@ -49,37 +53,39 @@
     <maven.site.version>3.21.0</maven.site.version>
   </properties>
 
+  <!-- Dependencies shared by all modules -->
   <dependencies>
-    <!-- Test Dependencies -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Logging Dependencies -->
+    <!-- Logging: SLF4J API + Logback Implementation -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${sl4j.version}</version>
     </dependency>
-
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>${logback.version}</version>
     </dependency>
 
+    <!-- Lombok: Reduces boilerplate code through annotations -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>${lombok.version}</version>
     </dependency>
-
   </dependencies>
 
-
+  <dependencyManagement>
+    <dependencies>
+      <!-- Test Dependencies -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
@@ -159,7 +165,9 @@
     </pluginManagement>
   </build>
 
+  <!-- Profiles: Different build configurations -->
   <profiles>
+    <!-- JLink Profile: Creates custom runtime image -->
     <profile>
       <id>jlink</id>
       <build>
@@ -182,7 +190,7 @@
             </executions>
           </plugin>
 
-          <!-- Configure JLink -->
+          <!-- JLink: Creates custom JRE with only required modules -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jlink-plugin</artifactId>

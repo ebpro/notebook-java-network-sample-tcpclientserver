@@ -1,0 +1,14 @@
+.git
+.gitignore
+**/target/
+!**/target/maven-jlink
+**/*.md
+.idea
+*.iml
+.settings
+.project
+.classpath
+.vscode
+**/logs/
+**/*.log
+**/*.hprof
