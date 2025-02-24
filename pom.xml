@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>fr.univtln.bruno.samples.network</groupId>
+  <artifactId>tcpclientserver</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>tcpclientserver</name>
+  <url>https://github.com/yourusername/tcpclientserver</url>
+    <modules>
+        <module>client</module>
+      <module>server</module>
+    </modules>
+    <description>A TCP client-server sample application</description>
+
+  <!-- Define versions in properties for easier management -->
+  <properties>
+    <!-- Build Properties -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Java Version -->
+    <java.version>21</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
+
+    <!-- Dependency Versions -->
+    <junit.version>5.12.0</junit.version>
+    <logback.version>1.5.16</logback.version>
+    <sl4j.version>2.0.16</sl4j.version>
+    <lombok.version>1.18.36</lombok.version>
+
+    <!-- Plugin Versions -->
+    <maven.compiler.version>3.14.0</maven.compiler.version>
+    <maven.surefire.version>3.5.2</maven.surefire.version>
+    <versions.maven.version>2.18.0</versions.maven.version>
+    <maven.jlink.plugin.version>3.2.0</maven.jlink.plugin.version>
+    <mavenjigsaw.version>1.1.3</mavenjigsaw.version>
+    <maven.dependency.version>3.4.0</maven.dependency.version>
+    <maven.clean.version>3.4.1</maven.clean.version>
+    <maven.resources.version>3.3.1</maven.resources.version>
+    <maven.jar.version>3.4.2</maven.jar.version>
+    <maven.install.version>3.1.3</maven.install.version>
+    <maven.deploy.version>3.1.3</maven.deploy.version>
+    <maven.site.version>3.21.0</maven.site.version>
+  </properties>
+
+  <dependencies>
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Logging Dependencies -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${sl4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+
+  </dependencies>
+
+
+
+  <build>
+    <plugins>
+      <!-- Versions plugin configuration -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${versions.maven.version}</version>
+        <configuration>
+          <rulesUri>https://bruno.univ-tln.fr/rules.xml</rulesUri>
+        </configuration>
+      </plugin>
+
+      <!-- Compiler plugin configuration -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.version}</version>
+        <configuration>
+          <release>${maven.compiler.release}</release>
+          <parameters>true</parameters>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+      <!-- Surefire plugin for running tests -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven.surefire.version}</version>
+      </plugin>
+    </plugins>
+
+    <!-- Plugin management with updated versions -->
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${maven.clean.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${maven.resources.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${maven.jar.version}</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <mainClass>${app.main.class}</mainClass>
+              </manifest>
+              <manifestEntries>
+                <Built-By>${user.name}</Built-By>
+                <Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
+              </manifestEntries>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${maven.install.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>${maven.deploy.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${maven.site.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>jlink</id>
+      <build>
+        <plugins>
+          <!-- Copy dependencies for modular build -->
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>${maven.dependency.version}</version>
+            <executions>
+              <execution>
+                <id>copy-dependencies</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/modules</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!-- Configure JLink -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jlink-plugin</artifactId>
+            <version>${maven.jlink.plugin.version}</version>
+            <configuration>
+              <classifier>runtime-image</classifier>
+              <verbose>true</verbose>
+              <addModules>
+                <addModule>${project.module}</addModule>
+              </addModules>
+              <modulePaths>
+                <modulePath>${project.build.directory}/modules</modulePath>
+              </modulePaths>
+              <launcher>app=${project.module}/${app.main.class}</launcher>
+              <stripDebug>true</stripDebug>
+              <noHeaderFiles>true</noHeaderFiles>
+              <noManPages>true</noManPages>
+              <bindServices>true</bindServices>
+            </configuration>
+            <executions>
+              <execution>
+                <id>create-runtime-image</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jlink</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <!-- Installation -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
